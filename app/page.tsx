@@ -2,16 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 
+const asset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
+
 const curtains = [
-  { name: "לינן טבעי", style: "קפל גל", color: "אבן בהירה", fabric: "פשתן רחוץ", opacity: "חצי שקוף", image: "/curtains/01-natural-linen.png", note: "פשתן רחוץ בגוון אבן בהירה, עם אריגה טבעית גלויה וקפלי גל רכים שמסננים את האור." },
-  { name: "רוך לבן", style: "קפל מכווץ", color: "לבן שבור", fabric: "ווואל פרימיום", opacity: "שקוף", image: "/curtains/02-white-voile.png", note: "ווואל לבן שבור, קליל ושקוף, בתפירת כיווץ עדינה שמכניסה אור טבעי ושומרת על פרטיות רכה." },
-  { name: "חול מדברי", style: "קפל שטוח", color: "בז׳ חול חם", fabric: "כותנה ארוגה", opacity: "חצי אטום", image: "/curtains/03-sand-cotton.png", note: "כותנה ארוגה בגוון חול חם, עם קפלים שטוחים ומוגדרים ומרקם עשיר שמתאים לחלל מינימליסטי." },
-  { name: "הצללה שקטה", style: "קפל גל", color: "גרייז׳ כהה", fabric: "Blackout תלת־שכבתי", opacity: "האפלה מלאה", image: "/curtains/04-greige-blackout.png", note: "בד האפלה כבד בגרייז׳ כהה, עם קפלי גל עמוקים. אטום לחלוטין ומתאים במיוחד לחדרי שינה." },
-  { name: "גל אירופאי", style: "קפל גל אחיד", color: "שמנת", fabric: "אריג טקסטורה", opacity: "חצי שקוף", image: "/curtains/05-cream-wave.png", note: "אריג שמנת חצי שקוף עם גלי S אחידים מראש הווילון ועד המכפלת, למראה מדויק של מלון בוטיק." },
-  { name: "רומאי רך", style: "וילון רומאי", color: "מוקה חם", fabric: "פשתן מעורב", opacity: "חצי אטום", image: "/curtains/06-mocha-roman.png", note: "וילון רומאי מפשתן מעורב בגוון מוקה, עם קיפולים אופקיים רחבים ושליטה נוחה בכמות האור." },
-  { name: "קטיפה עמוקה", style: "קפל משולש", color: "קרמל עמוק", fabric: "קטיפה רכה", opacity: "אטום", image: "/curtains/07-caramel-velvet.png", note: "קטיפה אטומה בגוון קרמל עמוק, בעלת ברק טבעי וקפלים משולשים תפורים ביד למראה עשיר." },
-  { name: "שכבות אור", style: "מערכת כפולה", color: "לבן וטאופ", fabric: "ווואל + האפלה", opacity: "מתכווננת", image: "/curtains/08-double-layer.png", note: "שתי שכבות נפרדות: ווואל לבן שקוף לשעות היום ובד טאופ אטום להצללה מלאה בערב." },
-  { name: "מינימל אפור", style: "קפל גל במסילה נסתרת", color: "אפור פנינה", fabric: "אריג טקסטורה", opacity: "חצי אטום", image: "/curtains/09-pearl-grey.png", note: "אריג טקסטורה באפור פנינה, קפלי גל שקטים ומסילה סמויה בקו התקרה למראה מודרני ונקי." },
+  { name: "לינן טבעי", style: "קפל גל", color: "אבן בהירה", fabric: "פשתן רחוץ", opacity: "חצי שקוף", image: asset("/curtains/01-natural-linen.png"), note: "פשתן רחוץ בגוון אבן בהירה, עם אריגה טבעית גלויה וקפלי גל רכים שמסננים את האור." },
+  { name: "רוך לבן", style: "קפל מכווץ", color: "לבן שבור", fabric: "ווואל פרימיום", opacity: "שקוף", image: asset("/curtains/02-white-voile.png"), note: "ווואל לבן שבור, קליל ושקוף, בתפירת כיווץ עדינה שמכניסה אור טבעי ושומרת על פרטיות רכה." },
+  { name: "חול מדברי", style: "קפל שטוח", color: "בז׳ חול חם", fabric: "כותנה ארוגה", opacity: "חצי אטום", image: asset("/curtains/03-sand-cotton.png"), note: "כותנה ארוגה בגוון חול חם, עם קפלים שטוחים ומוגדרים ומרקם עשיר שמתאים לחלל מינימליסטי." },
+  { name: "הצללה שקטה", style: "קפל גל", color: "גרייז׳ כהה", fabric: "Blackout תלת־שכבתי", opacity: "האפלה מלאה", image: asset("/curtains/04-greige-blackout.png"), note: "בד האפלה כבד בגרייז׳ כהה, עם קפלי גל עמוקים. אטום לחלוטין ומתאים במיוחד לחדרי שינה." },
+  { name: "גל אירופאי", style: "קפל גל אחיד", color: "שמנת", fabric: "אריג טקסטורה", opacity: "חצי שקוף", image: asset("/curtains/05-cream-wave.png"), note: "אריג שמנת חצי שקוף עם גלי S אחידים מראש הווילון ועד המכפלת, למראה מדויק של מלון בוטיק." },
+  { name: "רומאי רך", style: "וילון רומאי", color: "מוקה חם", fabric: "פשתן מעורב", opacity: "חצי אטום", image: asset("/curtains/06-mocha-roman.png"), note: "וילון רומאי מפשתן מעורב בגוון מוקה, עם קיפולים אופקיים רחבים ושליטה נוחה בכמות האור." },
+  { name: "קטיפה עמוקה", style: "קפל משולש", color: "קרמל עמוק", fabric: "קטיפה רכה", opacity: "אטום", image: asset("/curtains/07-caramel-velvet.png"), note: "קטיפה אטומה בגוון קרמל עמוק, בעלת ברק טבעי וקפלים משולשים תפורים ביד למראה עשיר." },
+  { name: "שכבות אור", style: "מערכת כפולה", color: "לבן וטאופ", fabric: "ווואל + האפלה", opacity: "מתכווננת", image: asset("/curtains/08-double-layer.png"), note: "שתי שכבות נפרדות: ווואל לבן שקוף לשעות היום ובד טאופ אטום להצללה מלאה בערב." },
+  { name: "מינימל אפור", style: "קפל גל במסילה נסתרת", color: "אפור פנינה", fabric: "אריג טקסטורה", opacity: "חצי אטום", image: asset("/curtains/09-pearl-grey.png"), note: "אריג טקסטורה באפור פנינה, קפלי גל שקטים ומסילה סמויה בקו התקרה למראה מודרני ונקי." },
 ];
 
 export default function Home() {
@@ -129,7 +131,7 @@ export default function Home() {
           </div>
           <div id="about" className="reveal-about">
             <div className="reveal-about-image">
-              <img src="/curtains/01-natural-linen.png" alt="וילון פשתן טבעי בתפירה אישית" />
+              <img src={asset("/curtains/01-natural-linen.png")} alt="וילון פשתן טבעי בתפירה אישית" />
               <span className="measure-chip">± 1 ס״מ<br /><small>דיוק במדידה</small></span>
             </div>
             <div className="reveal-about-copy">
@@ -151,7 +153,7 @@ export default function Home() {
         <div className="process-grid">
           <div className="light-lab">
             <div className="lab-visual">
-              <img src="/curtains/02-white-voile.png" alt="הדמיית מעבר אור דרך וילון ווואל" />
+              <img src={asset("/curtains/02-white-voile.png")} alt="הדמיית מעבר אור דרך וילון ווואל" />
               <div className="lab-shade" style={{ opacity: (100 - lightLevel) / 118 }} />
               <span className="live-pill"><i /> הדמיית אור חיה</span>
               <div className="light-readout"><b>{lightLevel}%</b><span>אור בחלל</span></div>
@@ -163,10 +165,10 @@ export default function Home() {
             </div>
           </div>
           <div className="process-steps">
-            <article className="process-step"><img src="/curtains/09-pearl-grey.png" alt="בדיקת וילון בזמן מדידה" /><span>01</span><div><h3>מודדים בבית</h3><p>רוחב, גובה, תקרה ומסילה — עד הסנטימטר.</p><small>45–60 דקות</small></div></article>
-            <article className="process-step"><img src="/curtains/03-sand-cotton.png" alt="בחירת בד כותנה בגוון חול" /><span>02</span><div><h3>בוחרים בד</h3><p>גוון, אריגה ושקיפות מול האור האמיתי בבית.</p><small>דוגמאות אצלכם</small></div></article>
-            <article className="process-step"><img src="/curtains/07-caramel-velvet.png" alt="קפלים תפורים בבד קטיפה" /><span>03</span><div><h3>תופרים בסטודיו</h3><p>גזירה, מכפלות וקפלים בעבודת יד.</p><small>7–14 ימי עבודה</small></div></article>
-            <article className="process-step"><img src="/curtains/08-double-layer.png" alt="וילון כפול לאחר התקנה" /><span>04</span><div><h3>מתקינים ומכוונים</h3><p>מסילה, תלייה, אידוי ובדיקת הנפילה.</p><small>1–3 שעות</small></div></article>
+            <article className="process-step"><img src={asset("/curtains/09-pearl-grey.png")} alt="בדיקת וילון בזמן מדידה" /><span>01</span><div><h3>מודדים בבית</h3><p>רוחב, גובה, תקרה ומסילה — עד הסנטימטר.</p><small>45–60 דקות</small></div></article>
+            <article className="process-step"><img src={asset("/curtains/03-sand-cotton.png")} alt="בחירת בד כותנה בגוון חול" /><span>02</span><div><h3>בוחרים בד</h3><p>גוון, אריגה ושקיפות מול האור האמיתי בבית.</p><small>דוגמאות אצלכם</small></div></article>
+            <article className="process-step"><img src={asset("/curtains/07-caramel-velvet.png")} alt="קפלים תפורים בבד קטיפה" /><span>03</span><div><h3>תופרים בסטודיו</h3><p>גזירה, מכפלות וקפלים בעבודת יד.</p><small>7–14 ימי עבודה</small></div></article>
+            <article className="process-step"><img src={asset("/curtains/08-double-layer.png")} alt="וילון כפול לאחר התקנה" /><span>04</span><div><h3>מתקינים ומכוונים</h3><p>מסילה, תלייה, אידוי ובדיקת הנפילה.</p><small>1–3 שעות</small></div></article>
           </div>
         </div>
       </section>
@@ -175,9 +177,9 @@ export default function Home() {
         <div className="projects-head"><div><p className="eyebrow">בתים שקיבלו מסגרת חדשה</p><h2>הווילון משנה<br />את כל החדר.</h2></div><div><p>שלושה חללים, שלוש רמות אור ושלושה סוגי בד. עברו בין הפרויקטים וראו איך בחירה נכונה הופכת את הווילון לחלק מהאדריכלות.</p><a href="#contact" className="outline-button">לתכנון החלל שלכם <span>←</span></a></div></div>
         <div className="project-stage">
           {[
-            { image: "/projects/living-linen.png", title: "אור טבעי בסלון", place: "בית פרטי · סלון", fabric: "פשתן רחוץ", color: "אבן בהירה", light: "אור מסונן", story: "וילון פשתן רחב מקיר לקיר, שמרכך את אור הבוקר ונותן לחלל גובה, תנועה ושקט." },
-            { image: "/projects/living-double-layer.png", title: "שתי שכבות, שליטה מלאה", place: "דירה עירונית · סלון", fabric: "ווואל + האפלה", color: "לבן וטאופ", light: "יום ולילה", story: "שתי מסילות נסתרות מאפשרות לעבור משקיפות מלאה לפרטיות והאפלה בלי לשנות את שפת החדר." },
-            { image: "/projects/living-velvet.png", title: "קטיפה באור ערב", place: "בית מודרני · פינת אירוח", fabric: "קטיפה רכה", color: "קרמל עמוק", light: "האפלה מלאה", story: "קטיפה עשירה יוצרת קיר טקסטיל חם, משפרת את האקוסטיקה ומעניקה לחלל נוכחות בשעות הערב." },
+            { image: asset("/projects/living-linen.png"), title: "אור טבעי בסלון", place: "בית פרטי · סלון", fabric: "פשתן רחוץ", color: "אבן בהירה", light: "אור מסונן", story: "וילון פשתן רחב מקיר לקיר, שמרכך את אור הבוקר ונותן לחלל גובה, תנועה ושקט." },
+            { image: asset("/projects/living-double-layer.png"), title: "שתי שכבות, שליטה מלאה", place: "דירה עירונית · סלון", fabric: "ווואל + האפלה", color: "לבן וטאופ", light: "יום ולילה", story: "שתי מסילות נסתרות מאפשרות לעבור משקיפות מלאה לפרטיות והאפלה בלי לשנות את שפת החדר." },
+            { image: asset("/projects/living-velvet.png"), title: "קטיפה באור ערב", place: "בית מודרני · פינת אירוח", fabric: "קטיפה רכה", color: "קרמל עמוק", light: "האפלה מלאה", story: "קטיפה עשירה יוצרת קיר טקסטיל חם, משפרת את האקוסטיקה ומעניקה לחלל נוכחות בשעות הערב." },
           ].map((project, index) => <article className={activeProject === index ? "project-slide active" : "project-slide"} key={project.title} aria-hidden={activeProject !== index}>
             <img src={project.image} alt={`${project.title} — ${project.fabric} בגוון ${project.color}`} />
             <div className="project-gradient" />
