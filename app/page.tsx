@@ -19,6 +19,7 @@ export default function Home() {
   const [selected, setSelected] = useState<(typeof curtains)[number] | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [sent, setSent] = useState(false);
+  const [lightLevel, setLightLevel] = useState(62);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -37,7 +38,10 @@ export default function Home() {
       hero.style.setProperty("--gather", (1 - current * 0.72).toFixed(4));
       hero.style.setProperty("--room-light", (0.62 + current * 0.38).toFixed(4));
       hero.style.setProperty("--room-scale", (1.06 - current * 0.06).toFixed(4));
-      hero.style.setProperty("--hero-opacity", Math.max(0, Math.min(1, (current - 0.12) * 2.1)).toFixed(4));
+      const titleIn = Math.max(0, Math.min(1, (current - 0.12) * 2.1));
+      const titleOut = 1 - Math.max(0, Math.min(1, (current - 0.64) / 0.2));
+      const aboutProgress = Math.max(0, Math.min(1, (current - 0.6) / 0.4));
+      hero.style.setProperty("--hero-opacity", (titleIn * titleOut).toFixed(4));
       hero.style.setProperty("--hero-y", `${((1 - current) * 30).toFixed(2)}px`);
       hero.style.setProperty("--hero-scale", (0.97 + current * 0.03).toFixed(4));
       hero.style.setProperty("--glow-opacity", (current * 0.8).toFixed(4));
@@ -47,6 +51,9 @@ export default function Home() {
       hero.style.setProperty("--sway-left", `${(-velocity * 0.28).toFixed(3)}deg`);
       hero.style.setProperty("--sway-right", `${(velocity * 0.28).toFixed(3)}deg`);
       hero.style.setProperty("--edge-shift", `${(velocity * 8).toFixed(2)}px`);
+      hero.style.setProperty("--about-opacity", aboutProgress.toFixed(4));
+      hero.style.setProperty("--about-y", `${((1 - aboutProgress) * 110).toFixed(2)}px`);
+      hero.style.setProperty("--about-scale", (0.94 + aboutProgress * 0.06).toFixed(4));
       frame = requestAnimationFrame(animate);
     };
     update();
@@ -90,25 +97,47 @@ export default function Home() {
             <p className="hero-sub">מהמדידה הראשונה ועד הקפל האחרון — אני תופר ומתקין כל וילון בעצמי, בהתאמה מלאה לחלל.</p>
             <a className="primary-button" href="#collection">לגלות את הקולקציה <span>↓</span></a>
           </div>
+          <div id="about" className="reveal-about">
+            <div className="reveal-about-image">
+              <img src="/curtains/01-natural-linen.png" alt="וילון פשתן טבעי בתפירה אישית" />
+              <span className="measure-chip">± 1 ס״מ<br /><small>דיוק במדידה</small></span>
+            </div>
+            <div className="reveal-about-copy">
+              <p className="eyebrow">מאחורי הווילון</p>
+              <h2>יד אחת.<br />מהמדידה עד התלייה.</h2>
+              <p>אני מגיע לבית, מודד, מתאים את הבד לאור ולחלל, תופר בסטודיו ומתקין בעצמי. כך כל פרט נשאר מדויק — מהרוחב והגובה ועד הקפל האחרון.</p>
+              <div className="about-facts"><span><b>01</b> מדידה בבית</span><span><b>02</b> תפירה אישית</span><span><b>03</b> התקנה וגימור</span></div>
+              <a href="#process" className="glass-button">לראות איך זה קורה <span>↓</span></a>
+            </div>
+          </div>
           <div className="curtain-panel curtain-left"><div className="curtain-folds" /><div className="curtain-edge" /></div>
           <div className="curtain-panel curtain-right"><div className="curtain-folds" /><div className="curtain-edge" /></div>
           <div className="scroll-hint"><span>גלו את הבית מחדש</span><i /></div>
         </div>
       </section>
 
-      <section id="about" className="intro section-pad">
-        <div className="section-index">01</div>
-        <div className="intro-title"><p className="eyebrow">נעים להכיר</p><h2>לא עוד וילון מהמדף.<br />עבודת יד לבית שלך.</h2></div>
-        <div className="intro-copy"><p>אני מלווה כל פרויקט באופן אישי — מגיע למדידה, עוזר לבחור את הבד והגוון הנכון, תופר לפי המידות המדויקות ומתקין עד שהנפילה מושלמת.</p><p>כך אין פער בין מי שתכנן למי שתפר ולמי שהתקין. יש כתובת אחת, יד אחת ותוצאה שנראית חלק מהבית.</p><div className="signature">נמדד ביד · נתפר בסטודיו · מותקן בבית</div></div>
-      </section>
-
       <section id="process" className="process section-pad">
-        <div className="process-head"><div><p className="eyebrow">איך זה עובד</p><h2>ארבעה צעדים.<br />תוצאה אחת מדויקת.</h2></div><p>תהליך מסודר ושקוף, עם לוחות זמנים ברורים מהרגע הראשון.</p></div>
-        <div className="steps">
-          <article><span>01</span><div className="step-icon">⌂</div><h3>ייעוץ ומדידה</h3><p>פגישה בבית, מדידה מדויקת של רוחב וגובה, בדיקת הקירות והתאמת סוג המסילה.</p><small>כ־45–60 דקות</small></article>
-          <article><span>02</span><div className="step-icon">◫</div><h3>בחירת בד</h3><p>מתאימים יחד בד, צבע, רמת שקיפות וסוג קפל לאור, לריהוט ולאופי החלל.</p><small>במהלך הפגישה</small></article>
-          <article><span>03</span><div className="step-icon">✂</div><h3>תפירה אישית</h3><p>כל וילון נגזר ונתפר בסטודיו לפי המידה, כולל מכפלות, סרט וקפלים בגימור ידני.</p><small>7–14 ימי עבודה</small></article>
-          <article><span>04</span><div className="step-icon">✓</div><h3>התקנה וגימור</h3><p>התקנת המסילה, תלייה, אידוי וכיוון הקפלים עד שהתוצאה יושבת בדיוק במקום.</p><small>כשעה–שלוש שעות</small></article>
+        <div className="process-head"><div><p className="eyebrow">הסטודיו בפעולה</p><h2>לא רק לקרוא.<br />להרגיש את הבד.</h2></div><p>שחקו עם כמות האור, עברו בין השלבים וראו איך וילון נולד — מהחלון הריק ועד לנפילה המדויקת.</p></div>
+        <div className="process-grid">
+          <div className="light-lab">
+            <div className="lab-visual">
+              <img src="/curtains/02-white-voile.png" alt="הדמיית מעבר אור דרך וילון ווואל" />
+              <div className="lab-shade" style={{ opacity: (100 - lightLevel) / 118 }} />
+              <span className="live-pill"><i /> הדמיית אור חיה</span>
+              <div className="light-readout"><b>{lightLevel}%</b><span>אור בחלל</span></div>
+            </div>
+            <div className="lab-controls">
+              <div><p className="eyebrow">בקרת שקיפות</p><h3>כמה אור תרצו להכניס?</h3></div>
+              <input aria-label="כמות האור בחלל" type="range" min="8" max="100" value={lightLevel} onChange={(e) => setLightLevel(Number(e.target.value))} />
+              <div className="light-presets"><button onClick={() => setLightLevel(92)} className={lightLevel === 92 ? "active" : ""}>ווואל</button><button onClick={() => setLightLevel(55)} className={lightLevel === 55 ? "active" : ""}>מסונן</button><button onClick={() => setLightLevel(12)} className={lightLevel === 12 ? "active" : ""}>האפלה</button></div>
+            </div>
+          </div>
+          <div className="process-steps">
+            <article className="process-step"><img src="/curtains/09-pearl-grey.png" alt="בדיקת וילון בזמן מדידה" /><span>01</span><div><h3>מודדים בבית</h3><p>רוחב, גובה, תקרה ומסילה — עד הסנטימטר.</p><small>45–60 דקות</small></div></article>
+            <article className="process-step"><img src="/curtains/03-sand-cotton.png" alt="בחירת בד כותנה בגוון חול" /><span>02</span><div><h3>בוחרים בד</h3><p>גוון, אריגה ושקיפות מול האור האמיתי בבית.</p><small>דוגמאות אצלכם</small></div></article>
+            <article className="process-step"><img src="/curtains/07-caramel-velvet.png" alt="קפלים תפורים בבד קטיפה" /><span>03</span><div><h3>תופרים בסטודיו</h3><p>גזירה, מכפלות וקפלים בעבודת יד.</p><small>7–14 ימי עבודה</small></div></article>
+            <article className="process-step"><img src="/curtains/08-double-layer.png" alt="וילון כפול לאחר התקנה" /><span>04</span><div><h3>מתקינים ומכוונים</h3><p>מסילה, תלייה, אידוי ובדיקת הנפילה.</p><small>1–3 שעות</small></div></article>
+          </div>
         </div>
       </section>
 
