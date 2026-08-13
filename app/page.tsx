@@ -24,6 +24,20 @@ export default function Home() {
   const [lightLevel, setLightLevel] = useState(62);
   const [activeProject, setActiveProject] = useState(0);
 
+  const sendMeasurementToWhatsApp = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const message = [
+      "שלום, אשמח לתאם מדידה לווילונות.",
+      `שם: ${form.get("name")}`,
+      `טלפון: ${form.get("phone")}`,
+      `אזור: ${form.get("area") || "לא צוין"}`,
+      `סוג הפרויקט: ${form.get("project")}`,
+    ].join("\n");
+    window.open(`https://wa.me/972543963434?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+    setSent(true);
+  };
+
   useEffect(() => {
     const hero = heroRef.current;
     if (!hero) return;
@@ -205,8 +219,8 @@ export default function Home() {
 
       <section id="contact" className="contact section-pad">
         <div className="contact-copy"><p className="eyebrow">מתחילים מהחלון שלכם</p><h2>רוצים לראות איך הבית<br /><em>יכול להרגיש?</em></h2><p>השאירו פרטים לתיאום מדידה וייעוץ בבית. נחזור אליכם עם כל מה שצריך כדי להתחיל.</p><div className="contact-facts"><span>✓ ייעוץ אישי בבית</span><span>✓ הצעת מחיר מסודרת</span><span>✓ בלי התחייבות</span></div></div>
-        <form onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
-          {sent ? <div className="success"><b>תודה, הפרטים התקבלו.</b><p>נחזור אליכם בהקדם לתיאום המדידה.</p><button type="button" onClick={() => setSent(false)}>שליחת פנייה נוספת</button></div> : <><label>שם מלא<input required placeholder="איך לפנות אליכם?" /></label><label>טלפון<input required type="tel" placeholder="050-0000000" /></label><label>אזור בארץ<input placeholder="עיר / יישוב" /></label><label>מה תרצו לעשות?<select defaultValue=""><option value="" disabled>בחרו סוג פרויקט</option><option>וילונות לסלון</option><option>וילונות לחדרי שינה</option><option>בית שלם</option><option>ייעוץ והתאמה</option></select></label><button className="submit-button">לתיאום מדידה <span>←</span></button><small>הפרטים נשמרים רק לצורך יצירת קשר</small></>}
+        <form onSubmit={sendMeasurementToWhatsApp}>
+          {sent ? <div className="success"><b>ההודעה מוכנה ב־WhatsApp.</b><p>לחצו על שליחה בשיחת ה־WhatsApp שנפתחה כדי להשלים את הבקשה.</p><button type="button" onClick={() => setSent(false)}>שליחת פנייה נוספת</button></div> : <><label>שם מלא<input name="name" required placeholder="איך לפנות אליכם?" /></label><label>טלפון<input name="phone" required type="tel" placeholder="050-0000000" /></label><label>אזור בארץ<input name="area" placeholder="עיר / יישוב" /></label><label>מה תרצו לעשות?<select name="project" defaultValue="" required><option value="" disabled>בחרו סוג פרויקט</option><option>וילונות לסלון</option><option>וילונות לחדרי שינה</option><option>בית שלם</option><option>ייעוץ והתאמה</option></select></label><button className="submit-button">שליחת בקשה ב־WhatsApp <span>←</span></button><small>בלחיצה תיפתח הודעת WhatsApp מוכנה למספר 054-3963434</small></>}
         </form>
       </section>
 
