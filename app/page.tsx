@@ -25,11 +25,37 @@ export default function Home() {
   useEffect(() => {
     const hero = heroRef.current;
     if (!hero) return;
-    let target = Math.min(1, window.scrollY / Math.max(520, window.innerHeight * 0.95));
+    let target = window.scrollY > 2 ? 1 : 0;
     let current = target;
     let previous = current;
+    let touchY: number | null = null;
     let frame = 0;
-    const update = () => { target = Math.min(1, window.scrollY / Math.max(520, window.innerHeight * 0.95)); };
+    const applyGesture = (amount: number) => {
+      target = Math.max(0, Math.min(1, target + amount));
+    };
+    const shouldCapture = (direction: number) => window.scrollY <= 2 && (target < 1 || current < 0.995 || direction < 0);
+    const onWheel = (event: WheelEvent) => {
+      const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1);
+      if (!shouldCapture(delta)) return;
+      event.preventDefault();
+      applyGesture(delta / 1050);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      const direction = event.key === "ArrowUp" || event.key === "PageUp" ? -1 : event.key === "ArrowDown" || event.key === "PageDown" || event.key === " " ? 1 : 0;
+      if (!direction || !shouldCapture(direction)) return;
+      event.preventDefault();
+      applyGesture(direction * 0.16);
+    };
+    const onTouchStart = (event: TouchEvent) => { touchY = event.touches[0]?.clientY ?? null; };
+    const onTouchMove = (event: TouchEvent) => {
+      const nextY = event.touches[0]?.clientY;
+      if (touchY === null || nextY === undefined) return;
+      const delta = touchY - nextY;
+      touchY = nextY;
+      if (!shouldCapture(delta)) return;
+      event.preventDefault();
+      applyGesture(delta / 720);
+    };
     const animate = () => {
       current += (target - current) * 0.075;
       const velocity = Math.max(-1, Math.min(1, (current - previous) * 85));
@@ -57,14 +83,17 @@ export default function Home() {
       hero.style.setProperty("--about-scale", (0.94 + aboutProgress * 0.06).toFixed(4));
       frame = requestAnimationFrame(animate);
     };
-    update();
     animate();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
     };
   }, []);
 
