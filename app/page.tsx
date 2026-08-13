@@ -4,15 +4,15 @@ import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 
 const curtains = [
-  { name: "לינן טבעי", style: "וילון נשפך", color: "אבן בהירה", fabric: "פשתן רחוץ", opacity: "חצי שקוף", image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=85", note: "מראה רך וטבעי שמכניס אור מסונן לסלון, בתפירת קפל גל מדויקת." },
-  { name: "רוך לבן", style: "וילון הסטה", color: "לבן שבור", fabric: "ווואל פרימיום", opacity: "שקוף", image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85", note: "בד קליל ואוורירי לחללים שרוצים בהם אור טבעי ותחושת מרחב." },
-  { name: "חול מדברי", style: "קפל שטוח", color: "בז׳ חם", fabric: "כותנה ארוגה", opacity: "חצי אטום", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=85", note: "מרקם עשיר בגוון חול שמוסיף חמימות בלי להכביד על החלל." },
-  { name: "הצללה שקטה", style: "וילון האפלה", color: "גרייז׳", fabric: "Blackout תלת־שכבתי", opacity: "האפלה מלאה", image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=85", note: "פתרון אלגנטי לחדרי שינה, עם נפילה כבדה ובידוד משופר." },
-  { name: "גל אירופאי", style: "קפל גל", color: "שמנת", fabric: "פוליאסטר ארוג", opacity: "חצי שקוף", image: "https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&w=1200&q=85", note: "גלים אחידים לכל האורך, תפירה נקייה ומראה של מלון בוטיק." },
-  { name: "רומאי רך", style: "וילון רומאי", color: "מוקה", fabric: "פשתן מעורב", opacity: "חצי אטום", image: "https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=1200&q=85", note: "קיפול מדויק וחסכוני במקום לחלונות מטבח, פינות עבודה וחדרים קטנים." },
-  { name: "קטיפה עמוקה", style: "קפל מכווץ", color: "קרמל", fabric: "קטיפה רכה", opacity: "אטום", image: "https://images.unsplash.com/photo-1617104678098-de229db51175?auto=format&fit=crop&w=1200&q=85", note: "נוכחות עשירה ובידוד נעים, בגימור מוקפד שמתאים לחללים יוקרתיים." },
-  { name: "שכבות אור", style: "וילון כפול", color: "לבן וטאופ", fabric: "ווואל + האפלה", opacity: "מתכווננת", image: "https://images.unsplash.com/photo-1616137466211-f939a420be84?auto=format&fit=crop&w=1200&q=85", note: "שתי מסילות לשליטה מלאה: שכבת יום רכה ושכבת לילה אטומה." },
-  { name: "מינימל אפור", style: "וילון מסילה נסתרת", color: "אפור פנינה", fabric: "אריג טקסטורה", opacity: "חצי אטום", image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85", note: "קו מודרני ושקט, תפירה עד התקרה ליצירת תחושת גובה ומרחב." },
+  { name: "לינן טבעי", style: "קפל גל", color: "אבן בהירה", fabric: "פשתן רחוץ", opacity: "חצי שקוף", image: "/curtains/01-natural-linen.png", note: "פשתן רחוץ בגוון אבן בהירה, עם אריגה טבעית גלויה וקפלי גל רכים שמסננים את האור." },
+  { name: "רוך לבן", style: "קפל מכווץ", color: "לבן שבור", fabric: "ווואל פרימיום", opacity: "שקוף", image: "/curtains/02-white-voile.png", note: "ווואל לבן שבור, קליל ושקוף, בתפירת כיווץ עדינה שמכניסה אור טבעי ושומרת על פרטיות רכה." },
+  { name: "חול מדברי", style: "קפל שטוח", color: "בז׳ חול חם", fabric: "כותנה ארוגה", opacity: "חצי אטום", image: "/curtains/03-sand-cotton.png", note: "כותנה ארוגה בגוון חול חם, עם קפלים שטוחים ומוגדרים ומרקם עשיר שמתאים לחלל מינימליסטי." },
+  { name: "הצללה שקטה", style: "קפל גל", color: "גרייז׳ כהה", fabric: "Blackout תלת־שכבתי", opacity: "האפלה מלאה", image: "/curtains/04-greige-blackout.png", note: "בד האפלה כבד בגרייז׳ כהה, עם קפלי גל עמוקים. אטום לחלוטין ומתאים במיוחד לחדרי שינה." },
+  { name: "גל אירופאי", style: "קפל גל אחיד", color: "שמנת", fabric: "אריג טקסטורה", opacity: "חצי שקוף", image: "/curtains/05-cream-wave.png", note: "אריג שמנת חצי שקוף עם גלי S אחידים מראש הווילון ועד המכפלת, למראה מדויק של מלון בוטיק." },
+  { name: "רומאי רך", style: "וילון רומאי", color: "מוקה חם", fabric: "פשתן מעורב", opacity: "חצי אטום", image: "/curtains/06-mocha-roman.png", note: "וילון רומאי מפשתן מעורב בגוון מוקה, עם קיפולים אופקיים רחבים ושליטה נוחה בכמות האור." },
+  { name: "קטיפה עמוקה", style: "קפל משולש", color: "קרמל עמוק", fabric: "קטיפה רכה", opacity: "אטום", image: "/curtains/07-caramel-velvet.png", note: "קטיפה אטומה בגוון קרמל עמוק, בעלת ברק טבעי וקפלים משולשים תפורים ביד למראה עשיר." },
+  { name: "שכבות אור", style: "מערכת כפולה", color: "לבן וטאופ", fabric: "ווואל + האפלה", opacity: "מתכווננת", image: "/curtains/08-double-layer.png", note: "שתי שכבות נפרדות: ווואל לבן שקוף לשעות היום ובד טאופ אטום להצללה מלאה בערב." },
+  { name: "מינימל אפור", style: "קפל גל במסילה נסתרת", color: "אפור פנינה", fabric: "אריג טקסטורה", opacity: "חצי אטום", image: "/curtains/09-pearl-grey.png", note: "אריג טקסטורה באפור פנינה, קפלי גל שקטים ומסילה סמויה בקו התקרה למראה מודרני ונקי." },
 ];
 
 export default function Home() {
