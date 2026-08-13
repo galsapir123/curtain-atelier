@@ -20,6 +20,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [sent, setSent] = useState(false);
   const [lightLevel, setLightLevel] = useState(62);
+  const [activeProject, setActiveProject] = useState(0);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -141,9 +142,24 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="craft section-pad">
-        <div className="craft-image"><div className="craft-badge"><b>100%</b><span>תפירה אישית</span></div></div>
-        <div className="craft-copy"><p className="eyebrow">הפרטים עושים את ההבדל</p><h2>תפור למידה.<br /><em>עד הסנטימטר האחרון.</em></h2><p>אני מחשב את כמות הבד לפי רוחב החלון, גובה התקרה וסוג הקפל — כדי לקבל נפילה מלאה, ישרה ומאוזנת. כל מכפלת, חיבור ושול נשקלים לפי הבד והחלל.</p><ul><li><span>01</span>התאמה לחלונות גדולים, פינתיים ולא סטנדרטיים</li><li><span>02</span>מסילות תקרה, מסילות נסתרות ומוטות דקורטיביים</li><li><span>03</span>דיוק בגובה עד הרצפה וביחס הקפלים</li></ul><a href="#contact" className="text-link">בואו נתכנן את הווילון שלכם <span>←</span></a></div>
+      <section className="projects section-pad">
+        <div className="projects-head"><div><p className="eyebrow">בתים שקיבלו מסגרת חדשה</p><h2>הווילון משנה<br />את כל החדר.</h2></div><div><p>שלושה חללים, שלוש רמות אור ושלושה סוגי בד. עברו בין הפרויקטים וראו איך בחירה נכונה הופכת את הווילון לחלק מהאדריכלות.</p><a href="#contact" className="outline-button">לתכנון החלל שלכם <span>←</span></a></div></div>
+        <div className="project-stage">
+          {[
+            { image: "/projects/living-linen.png", title: "אור טבעי בסלון", place: "בית פרטי · סלון", fabric: "פשתן רחוץ", color: "אבן בהירה", light: "אור מסונן", story: "וילון פשתן רחב מקיר לקיר, שמרכך את אור הבוקר ונותן לחלל גובה, תנועה ושקט." },
+            { image: "/projects/living-double-layer.png", title: "שתי שכבות, שליטה מלאה", place: "דירה עירונית · סלון", fabric: "ווואל + האפלה", color: "לבן וטאופ", light: "יום ולילה", story: "שתי מסילות נסתרות מאפשרות לעבור משקיפות מלאה לפרטיות והאפלה בלי לשנות את שפת החדר." },
+            { image: "/projects/living-velvet.png", title: "קטיפה באור ערב", place: "בית מודרני · פינת אירוח", fabric: "קטיפה רכה", color: "קרמל עמוק", light: "האפלה מלאה", story: "קטיפה עשירה יוצרת קיר טקסטיל חם, משפרת את האקוסטיקה ומעניקה לחלל נוכחות בשעות הערב." },
+          ].map((project, index) => <article className={activeProject === index ? "project-slide active" : "project-slide"} key={project.title} aria-hidden={activeProject !== index}>
+            <img src={project.image} alt={`${project.title} — ${project.fabric} בגוון ${project.color}`} />
+            <div className="project-gradient" />
+            <div className="project-number">0{index + 1}</div>
+            <div className="project-info"><p>{project.place}</p><h3>{project.title}</h3><span>{project.story}</span><dl><div><dt>בד</dt><dd>{project.fabric}</dd></div><div><dt>גוון</dt><dd>{project.color}</dd></div><div><dt>אור</dt><dd>{project.light}</dd></div></dl></div>
+          </article>)}
+          <div className="project-tabs" role="tablist" aria-label="בחירת פרויקט">
+            {["סלון פשתן", "שכבות אור", "קטיפה בערב"].map((label, index) => <button role="tab" aria-selected={activeProject === index} className={activeProject === index ? "active" : ""} onClick={() => setActiveProject(index)} key={label}><span>0{index + 1}</span>{label}<i /></button>)}
+          </div>
+          <button className="project-next" aria-label="לפרויקט הבא" onClick={() => setActiveProject((activeProject + 1) % 3)}>←</button>
+        </div>
       </section>
 
       <section id="collection" className="collection section-pad">
