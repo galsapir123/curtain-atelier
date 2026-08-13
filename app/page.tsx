@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import type { CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const curtains = [
   { name: "לינן טבעי", style: "קפל גל", color: "אבן בהירה", fabric: "פשתן רחוץ", opacity: "חצי שקוף", image: "/curtains/01-natural-linen.png", note: "פשתן רחוץ בגוון אבן בהירה, עם אריגה טבעית גלויה וקפלי גל רכים שמסננים את האור." },
@@ -16,24 +15,55 @@ const curtains = [
 ];
 
 export default function Home() {
-  const [progress, setProgress] = useState(0);
+  const heroRef = useRef<HTMLDivElement>(null);
   const [selected, setSelected] = useState<(typeof curtains)[number] | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
-    const update = () => setProgress(Math.min(1, window.scrollY / Math.max(420, window.innerHeight * 0.82)));
+    const hero = heroRef.current;
+    if (!hero) return;
+    let target = Math.min(1, window.scrollY / Math.max(520, window.innerHeight * 0.95));
+    let current = target;
+    let previous = current;
+    let frame = 0;
+    const update = () => { target = Math.min(1, window.scrollY / Math.max(520, window.innerHeight * 0.95)); };
+    const animate = () => {
+      current += (target - current) * 0.075;
+      const velocity = Math.max(-1, Math.min(1, (current - previous) * 85));
+      previous = current;
+      hero.style.setProperty("--open", current.toFixed(4));
+      hero.style.setProperty("--sway", velocity.toFixed(3));
+      hero.style.setProperty("--gather", (1 - current * 0.72).toFixed(4));
+      hero.style.setProperty("--room-light", (0.62 + current * 0.38).toFixed(4));
+      hero.style.setProperty("--room-scale", (1.06 - current * 0.06).toFixed(4));
+      hero.style.setProperty("--hero-opacity", Math.max(0, Math.min(1, (current - 0.12) * 2.1)).toFixed(4));
+      hero.style.setProperty("--hero-y", `${((1 - current) * 30).toFixed(2)}px`);
+      hero.style.setProperty("--hero-scale", (0.97 + current * 0.03).toFixed(4));
+      hero.style.setProperty("--glow-opacity", (current * 0.8).toFixed(4));
+      hero.style.setProperty("--panel-light", (1 - current * 0.08).toFixed(4));
+      hero.style.setProperty("--fold-opacity", (0.18 + current * 0.5).toFixed(4));
+      hero.style.setProperty("--hint-opacity", Math.max(0, 1 - current * 3).toFixed(4));
+      hero.style.setProperty("--sway-left", `${(-velocity * 0.28).toFixed(3)}deg`);
+      hero.style.setProperty("--sway-right", `${(velocity * 0.28).toFixed(3)}deg`);
+      hero.style.setProperty("--edge-shift", `${(velocity * 8).toFixed(2)}px`);
+      frame = requestAnimationFrame(animate);
+    };
     update();
+    animate();
     window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
+    window.addEventListener("resize", update);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
   }, []);
 
   useEffect(() => {
     document.body.style.overflow = selected ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [selected]);
-
-  const panelStyle = useMemo(() => ({ "--open": progress } as CSSProperties), [progress]);
 
   return (
     <main dir="rtl">
@@ -50,17 +80,19 @@ export default function Home() {
       </header>
 
       <section id="top" className="curtain-stage" aria-label="פתיחת וילון בגלילה">
-        <div className="hero-sticky">
+        <div className="hero-sticky" ref={heroRef}>
           <div className="hero-room" />
-          <div className="hero-copy" style={{ opacity: Math.max(0, (progress - .18) * 1.7), transform: `translateY(${24 - progress * 24}px)` }}>
+          <div className="reveal-glow" />
+          <div className="curtain-track"><span /></div>
+          <div className="hero-copy">
             <p className="eyebrow">וילונות שנתפרים בשביל הבית שלך</p>
             <h1>האור הנכון.<br /><em>בדיוק במידה.</em></h1>
             <p className="hero-sub">מהמדידה הראשונה ועד הקפל האחרון — אני תופר ומתקין כל וילון בעצמי, בהתאמה מלאה לחלל.</p>
             <a className="primary-button" href="#collection">לגלות את הקולקציה <span>↓</span></a>
           </div>
-          <div className="curtain-panel curtain-left" style={panelStyle}><div className="curtain-edge" /></div>
-          <div className="curtain-panel curtain-right" style={panelStyle}><div className="curtain-edge" /></div>
-          <div className="scroll-hint" style={{ opacity: 1 - progress * 2 }}><span>גלו את הבית מחדש</span><i /></div>
+          <div className="curtain-panel curtain-left"><div className="curtain-folds" /><div className="curtain-edge" /></div>
+          <div className="curtain-panel curtain-right"><div className="curtain-folds" /><div className="curtain-edge" /></div>
+          <div className="scroll-hint"><span>גלו את הבית מחדש</span><i /></div>
         </div>
       </section>
 
