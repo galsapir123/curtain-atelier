@@ -123,7 +123,7 @@ export default function Home() {
       <header className="nav-shell">
         <a className="brand" href="#top" aria-label="חזרה להתחלה">
           <span className="brand-mark">ו</span>
-          <span><b>וילון</b><small>תפירה · מדידה · התקנה</small></span>
+          <span><b>ספיר וילונות</b><small>תפירה · מדידה · התקנה</small></span>
         </a>
         <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="פתיחת תפריט" aria-expanded={menuOpen}>☰</button>
         <nav className={menuOpen ? "nav-links open" : "nav-links"} onClick={() => setMenuOpen(false)}>
@@ -224,7 +224,7 @@ export default function Home() {
         </form>
       </section>
 
-      <footer><a className="brand footer-brand" href="#top"><span className="brand-mark">ו</span><span><b>וילון</b><small>תפירה · מדידה · התקנה</small></span></a><p>וילונות בעבודת יד ובהתאמה אישית</p><div><a href="#about">אודות</a><a href="#process">התהליך</a><a href="#collection">קולקציה</a></div><span>© 2026 כל הזכויות שמורות</span></footer>
+      <footer><a className="brand footer-brand" href="#top"><span className="brand-mark">ס</span><span><b>ספיר וילונות</b><small>תפירה · מדידה · התקנה</small></span></a><p>וילונות בעבודת יד ובהתאמה אישית</p><div><a href="#about">אודות</a><a href="#process">התהליך</a><a href="#collection">קולקציה</a></div><span>© 2026 SapirDevs כל הזכויות שמורות</span></footer>
 
       {selected && <div className="modal-backdrop" role="presentation" onMouseDown={() => setSelected(null)}><div className="modal" role="dialog" aria-modal="true" aria-label={`פרטי ${selected.name}`} onMouseDown={(e) => e.stopPropagation()}><button className="modal-close" onClick={() => setSelected(null)} aria-label="סגירה">×</button><img src={selected.image} alt={selected.name} /><div className="modal-copy"><p className="eyebrow">{selected.style}</p><h2>{selected.name}</h2><p>{selected.note}</p><dl><div><dt>סוג בד</dt><dd>{selected.fabric}</dd></div><div><dt>גוון</dt><dd>{selected.color}</dd></div><div><dt>רמת הצללה</dt><dd>{selected.opacity}</dd></div></dl><a href="#contact" onClick={() => setSelected(null)} className="primary-button">רוצה כזה בבית <span>←</span></a></div></div></div>}
     </main>

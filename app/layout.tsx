@@ -8,10 +8,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.includes("localhost") ? "http" : "https");
   const image = `${protocol}://${host}/og.png`;
   return {
-    title: "וילון | תפירה והתקנה בהתאמה אישית",
+    title: "ספיר וילונות | תפירה והתקנה בהתאמה אישית",
     description: "וילונות בעבודת יד — מדידה, תפירה והתקנה אישית עד הבית.",
-    openGraph: { title: "וילון | בדיוק במידה", description: "מדידה, תפירה והתקנה אישית עד הבית.", images: [image], locale: "he_IL", type: "website" },
-    twitter: { card: "summary_large_image", title: "וילון | בדיוק במידה", description: "מדידה, תפירה והתקנה אישית עד הבית.", images: [image] },
+    openGraph: { title: "ספיר וילונות | בדיוק במידה", description: "מדידה, תפירה והתקנה אישית עד הבית.", images: [image], locale: "he_IL", type: "website" },
+    twitter: { card: "summary_large_image", title: "ספיר וילונות | בדיוק במידה", description: "מדידה, תפירה והתקנה אישית עד הבית.", images: [image] },
   };
 }
 
